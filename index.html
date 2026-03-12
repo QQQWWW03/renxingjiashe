@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>人性假设测评 · 四步引导版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background-color: #d9eaf7;
+            min-height: 100vh;
+            padding: 20px 16px;
+            display: flex;
+            justify-content: center;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+        .card {
+            max-width: 1100px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(3px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 30, 60, 0.15);
+            padding: 30px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* 导航区 */
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px 16px;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.5);
+            padding: 16px 20px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .nav-btn {
+            background: #ecf5fd;
+            border: 1px solid white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 550;
+            color: #115a81;
+            box-shadow: 0 2px 6px rgba(0,50,70,0.1);
+            transition: 0.15s;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .nav-btn.active {
+            background: #1f6fa5;
+            color: white;
+            border-color: #1f6fa5;
+            box-shadow: 0 6px 12px rgba(20,95,150,0.3);
+        }
+        .nav-btn:hover {
+            background: #cde2fc;
+            transform: translateY(-2px);
+        }
+        .nav-btn.active:hover {
+            background: #1f6fa5;
+        }
+
+        @media (max-width: 600px) {
+            .nav-btn { padding: 8px 16px; font-size: 0.9rem; }
+        }
+
+        /* 封面 */
+        .cover {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(240,248,255,0.8));
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .cover h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #0a3b5b;
+            margin-bottom: 10px;
+        }
+        .cover p {
+            font-size: 1.2rem;
+            color: #1e4f6b;
+            background: rgba(255,255,255,0.6);
+            display: inline-block;
+            padding: 8px 30px;
+            border-radius: 50px;
+            margin: 15px 0 25px;
+        }
+        .btn-begin {
+            background: #1f6fa5;
+            color: white;
+            font-size: 1.3rem;
+            padding: 14px 45px;
+            border: none;
+            border-radius: 60px;
+            box-shadow: 0 10px 20px rgba(0,80,120,0.3);
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.15s;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .btn-begin:hover {
+            background: #2a82be;
+            transform: scale(1.02);
+        }
+
+        /* 通用区块样式 */
+        .section {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(2px);
+            border-radius: 24px;
+            padding: 22px 20px;
+            margin-bottom: 28px;
+            border: 1px solid rgba(255,255,255,0.7);
+            transition: box-shadow 0.2s;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 550;
+            color: #144a6e;
+            border-left: 7px solid #3978a8;
+            padding-left: 18px;
+            margin-bottom: 20px;
+        }
+        .sub-title {
+            font-size: 1.25rem;
+            font-weight: 520;
+            margin: 18px 0 12px 0;
+            color: #1e5a7a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sub-title span {
+            background: #2e6a93;
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: 400;
+        }
+
+        /* 基本信息网格 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 18px 22px;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .info-item label {
+            font-weight: 550;
+            color: #0c405b;
+        }
+        .info-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 18px;
+            background: #f0f9ff;
+            padding: 10px 15px;
+            border-radius: 28px;
+            border: 1px solid #b9d9f0;
+        }
+        .info-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 400;
+            color: #1b4b68;
+            cursor: pointer;
+        }
+        input[type="radio"] {
+            accent-color: #2b7abf;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 题目卡片 */
+        .dimension-block {
+            background: #eef5fc;
+            border-radius: 20px;
+            padding: 16px 16px 8px;
+            margin-bottom: 25px;
+            border: 1px solid #cae0f0;
+        }
+        .question-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            padding: 6px 4px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 18px;
+        }
+        .question-text {
+            flex: 1 1 55%;
+            font-size: 1rem;
+            color: #103d56;
+            padding-right: 10px;
+            font-weight: 480;
+            min-width: 240px;
+            margin-bottom: 6px;
+        }
+        .rating-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+            background: #d9ebfa;
+            padding: 8px 12px;
+            border-radius: 40px;
+            border: 1px solid white;
+        }
+        .rating-group label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #145a82;
+            border: 1px solid #acc9e2;
+            cursor: pointer;
+            padding: 8px 14px;
+            min-width: 70px;
+            text-align: center;
+            white-space: nowrap;
+            transition: 0.1s;
+        }
+        .rating-group label:has(input:checked) {
+            background: #1f6fa5;
+            color: white;
+            border-color: #1f6fa5;
+        }
+        .rating-group label input {
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .rating-group label {
+                white-space: normal;
+                font-size: 0.8rem;
+                padding: 6px 8px;
+                min-width: 55px;
+            }
+            .question-row {
+                flex-direction: column;
+            }
+            .rating-group {
+                justify-content: flex-start;
+            }
+        }
+
+        /* 计分面板 */
+        .score-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+        }
+        .score-card {
+            background: white;
+            border-radius: 28px;
+            padding: 18px 10px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(44,88,130,0.1);
+            border: 1px solid #cde1f2;
+        }
+        .score-card.highest {
+            background: #ffe9b6;
+            border: 3px solid #f7b32b;
+            transform: scale(1.02);
+            box-shadow: 0 15px 25px rgba(210,130,20,0.15);
+        }
+        .dimension-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #154a6b;
+            margin-bottom: 12px;
+        }
+        .dimension-score {
+            font-size: 2.7rem;
+            font-weight: 700;
+            color: #104f77;
+            line-height: 1.2;
+        }
+        .dimension-score small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #45749b;
+        }
+        .btn {
+            background: #e1effb;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            color: #11517c;
+            font-weight: 550;
+            border: 1px solid white;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 4px 8px rgba(0,50,80,0.1);
+        }
+        .btn:hover {
+            background: #cde4fc;
+            box-shadow: 0 8px 14px rgba(20,95,150,0.15);
+        }
+        .footer-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 25px;
+            gap: 12px;
+        }
+        .note {
+            font-size: 0.9rem;
+            color: #2a6285;
+            margin-top: 12px;
+            font-style: italic;
+            background: rgba(255,255,240,0.7);
+            padding: 6px 20px;
+            border-radius: 60px;
+            display: inline-block;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .next-btn {
+            margin-top: 25px;
+            text-align: right;
+        }
+        .info-note {
+            background: #ebf3fa;
+            border-radius: 30px;
+            padding: 8px 20px;
+            color: #144e72;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <!-- 导航 (始终可见) -->
+    <div class="nav-links">
+        <button class="nav-btn" id="navCover">📌 封面</button>
+        <button class="nav-btn" id="navBasic">📋 基本信息</button>
+        <button class="nav-btn" id="navQuestions">📝 核心题目</button>
+        <button class="nav-btn" id="navScores">📊 维度计分</button>
+    </div>
+
+    <!-- 封面区域 (id=coverSection) -->
+    <div id="coverSection" class="cover">
+        <h1>🧠 人性假设视角</h1>
+        <h1>员工人性认知测评</h1>
+        <p>管理心理学 · 四维人性量表</p>
+        <div style="margin: 15px 0 20px; color: #2e607e;">匿名 · 情境自评 · 分步引导</div>
+        <button class="btn-begin" id="startBtn">▶ 开始测评</button>
+    </div>
+
+    <!-- 基本信息部分 (id=basicSection) -->
+    <div id="basicSection" class="section hidden">
+        <div class="section-title">📋 基本信息 (可选)</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <label>性别</label>
+                <div class="info-options">
+                    <label><input type="radio" name="gender" value="男"> 男</label>
+                    <label><input type="radio" name="gender" value="女"> 女</label>
+                </div>
+            </div>
+            <div class="info-item">
+                <label>年龄</label>
+                <div class="info-options">
+                    <label><input type="radio" name="age" value="20-30"> 20-30</label>
+                    <label><input type="radio" name="age" value="31-40"> 31-40</label>
+                    <label><input type="radio" name="age" value="41-50"> 41-50</label>
+                    <label><input type="radio" name="age" value="50+"> 50+</label>
+                </div>
+            </div>
+            <div class="info-item">
+                <label>入职年限</label>
+                <div class="info-options">
+                    <label><input type="radio" name="tenure" value="1-5年以内"> 1-5年</label>
+                    <label><input type="radio" name="tenure" value="6-10年"> 6-10年</label>
+                    <label><input type="radio" name="tenure" value="10-20年"> 10-20年</label>
+                    <label><input type="radio" name="tenure" value="20年以上"> 20年+</label>
+                </div>
+            </div>
+            <div class="info-item">
+                <label>岗位类型</label>
+                <div class="info-options">
+                    <label><input type="radio" name="post" value="业务技术岗"> 业务技术</label>
+                    <label><input type="radio" name="post" value="管理岗"> 管理岗</label>
+                    <label><input type="radio" name="post" value="后勤岗"> 后勤岗</label>
+                </div>
+            </div>
+            <div class="info-item">
+                <label>学历</label>
+                <div class="info-options">
+                    <label><input type="radio" name="edu" value="高中及以下"> 高中↓</label>
+                    <label><input type="radio" name="edu" value="大专"> 大专</label>
+                    <label><input type="radio" name="edu" value="本科"> 本科</label>
+                    <label><input type="radio" name="edu" value="硕士及以上"> 硕士+</label>
+                </div>
+            </div>
+        </div>
+        <div class="next-btn">
+            <button class="btn" id="nextToQuestions">下一步 → 核心调研题目</button>
+        </div>
+    </div>
+
+    <!-- 核心题目部分 (id=questionsSection) -->
+    <div id="questionsSection" class="section hidden">
+        <div class="section-title">📝 核心调研题目</div>
+        <div class="info-note">
+            ⚡ 每题请选择最符合您想法的选项：1.完全不符合 &nbsp; 2.不太符合 &nbsp; 3.一般 &nbsp; 4.比较符合 &nbsp; 5.完全符合
+        </div>
+        <div id="questionsContainer"></div>
+        <!-- 自动跳转提示 (静默) -->
+        <div class="info-note" style="text-align:center;">✨ 完成全部20题后自动跳转至计分板</div>
+    </div>
+
+    <!-- 维度计分部分 (id=scoresSection) -->
+    <div id="scoresSection" class="section hidden">
+        <div class="section-title">📊 维度计分 (总分25 / 每维)</div>
+        <div id="scoreboard" class="score-panel"></div>
+        <div class="footer-actions">
+            <button class="btn" id="resetBtn">⟲ 重置所有选项</button>
+            <button class="btn" id="randomDemoBtn">🎲 随机示例</button>
+        </div>
+        <div id="completionNote" class="note">⭐ 最高分维度将自动高亮</div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- 维度数据 -----
+        const dimensions = [
+            { key: 'eco', name: '经济人假设', desc: '利益驱动 · 物质报酬为核心',
+              items: [
+                "员工工作的主要动力是获得满意的薪酬和福利。",
+                "若没有明确的物质奖励，员工不会主动承担额外的工作任务。",
+                "员工更倾向于选择薪酬更高的工作，即使工作内容相对枯燥。",
+                "员工认为严格的监督和惩罚，才能避免工作中偷懒、敷衍。",
+                "工作中，员工会优先考虑能给自己带来直接利益的事情。"
+              ] },
+            { key: 'soc', name: '社会人假设', desc: '社交需求 · 归属与人际',
+              items: [
+                "和谐的同事关系和团队氛围，比单纯的薪酬更重要。",
+                "员工更希望在工作中获得同事和上级的认可、尊重与关心。",
+                "参与团队活动、与同事协作交流，能提升员工的工作积极性。",
+                "若感觉自己不被团队接纳，员工的工作效率会明显下降。",
+                "员工更愿意在人际关系简单、氛围融洽的团队中工作。"
+              ] },
+            { key: 'self', name: '自我实现人假设', desc: '成长需求 · 价值实现',
+              items: [
+                "员工更希望工作能发挥自己的特长和能力，实现个人价值。",
+                "即使没有物质奖励，员工也愿意尝试有挑战性的工作，提升自己。",
+                "员工渴望获得学习、培训的机会，不断提升自身能力。",
+                "当工作能让员工感受到进步和成就感时，员工会更有动力。",
+                "员工更看重工作的发展空间，而非短期的物质回报。"
+              ] },
+            { key: 'comp', name: '复杂人假设', desc: '动态需求 · 情境复合',
+              items: [
+                "员工在工作中的需求会随场景变化（如压力大时需要关怀，闲时需要挑战）。",
+                "有时员工会为了物质报酬努力工作，有时也会为了团队认可或个人成长而投入。",
+                "面对不同的工作任务，员工的工作动力和态度会有所不同。",
+                "我认为没有一种单一的管理方式，能适用于所有员工。",
+                "员工的工作积极性，会受薪酬、人际关系、个人成长等多种因素共同影响。"
+              ] }
+        ];
+
+        const ratingLabels = ['完全不符合', '不太符合', '一般', '比较符合', '完全符合'];
+
+        // 渲染题目到questionsContainer
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            let html = '';
+            dimensions.forEach(dim => {
+                html += `<div class="dimension-block">`;
+                html += `<div class="sub-title">🧩 ${dim.name} <span>${dim.desc}</span></div>`;
+                dim.items.forEach((item, idx) => {
+                    const qName = `${dim.key}${idx+1}`;
+                    html += `<div class="question-row">`;
+                    html += `<div class="question-text">${idx+1}. ${item}</div>`;
+                    html += `<div class="rating-group">`;
+                    for (let v = 1; v <= 5; v++) {
+                        html += `<label><input type="radio" name="${qName}" value="${v}"> <span>${v}. ${ratingLabels[v-1]}</span></label>`;
+                    }
+                    html += `</div></div>`;
+                });
+                html += `</div>`;
+            });
+            container.innerHTML = html;
+        }
+        renderQuestions();
+
+        // ----- 步骤管理 -----
+        const coverSec = document.getElementById('coverSection');
+        const basicSec = document.getElementById('basicSection');
+        const questionsSec = document.getElementById('questionsSection');
+        const scoresSec = document.getElementById('scoresSection');
+
+        const navCover = document.getElementById('navCover');
+        const navBasic = document.getElementById('navBasic');
+        const navQuestions = document.getElementById('navQuestions');
+        const navScores = document.getElementById('navScores');
+        const navBtns = [navCover, navBasic, navQuestions, navScores];
+
+        let currentStep = 'cover'; // 'cover', 'basic', 'questions', 'score'
+
+        function showStep(step) {
+            // 隐藏所有
+            coverSec.classList.add('hidden');
+            basicSec.classList.add('hidden');
+            questionsSec.classList.add('hidden');
+            scoresSec.classList.add('hidden');
+
+            // 显示选中的
+            if (step === 'cover') coverSec.classList.remove('hidden');
+            else if (step === 'basic') basicSec.classList.remove('hidden');
+            else if (step === 'questions') questionsSec.classList.remove('hidden');
+            else if (step === 'score') scoresSec.classList.remove('hidden');
+
+            // 更新导航激活样式
+            navBtns.forEach(btn => btn.classList.remove('active'));
+            if (step === 'cover') navCover.classList.add('active');
+            else if (step === 'basic') navBasic.classList.add('active');
+            else if (step === 'questions') navQuestions.classList.add('active');
+            else if (step === 'score') navScores.classList.add('active');
+
+            currentStep = step;
+            // 每次显示计分板时更新分数
+            if (step === 'score') updateScoreboard();
+        }
+
+        // 导航点击事件
+        navCover.addEventListener('click', () => showStep('cover'));
+        navBasic.addEventListener('click', () => showStep('basic'));
+        navQuestions.addEventListener('click', () => showStep('questions'));
+        navScores.addEventListener('click', () => showStep('score'));
+
+        // 开始测评按钮
+        document.getElementById('startBtn').addEventListener('click', () => showStep('basic'));
+
+        // 基本信息下一步
+        document.getElementById('nextToQuestions').addEventListener('click', () => showStep('questions'));
+
+        // ----- 计分逻辑 -----
+        function calculateScores() {
+            const scores = { eco:0, soc:0, self:0, comp:0 };
+            const completed = { eco:true, soc:true, self:true, comp:true };
+            dimensions.forEach(dim => {
+                let total = 0;
+                let allChecked = true;
+                for (let i=1; i<=5; i++) {
+                    const name = `${dim.key}${i}`;
+                    const checked = document.querySelector(`input[name="${name}"]:checked`);
+                    if (checked) total += parseInt(checked.value);
+                    else allChecked = false;
+                }
+                scores[dim.key] = total;
+                completed[dim.key] = allChecked;
+            });
+            return { scores, completed };
+        }
+
+        function updateScoreboard() {
+            const { scores, completed } = calculateScores();
+            let maxScore = -1;
+            dimensions.forEach(dim => { if (completed[dim.key] && scores[dim.key] > maxScore) maxScore = scores[dim.key]; });
+
+            let boardHtml = '';
+            dimensions.forEach(dim => {
+                const raw = scores[dim.key];
+                const isCompleted = completed[dim.key];
+                const display = isCompleted ? raw : '—';
+                const isHighest = isCompleted && raw === maxScore && maxScore !== -1;
+                const note = isCompleted ? '/25' : ' (未完成)';
+                const cls = 'score-card' + (isHighest ? ' highest' : '');
+                boardHtml += `<div class="${cls}"><div class="dimension-name">${dim.name}</div><div class="dimension-score">${display}<small>${note}</small></div><div class="score-note">${dim.desc}</div></div>`;
+            });
+            document.getElementById('scoreboard').innerHTML = boardHtml;
+        }
+
+        // 检查所有核心题目是否答完，若已答完且当前不是score则自动跳转
+        function checkAllAndJumpToScore() {
+            let allAnswered = true;
+            for (let dim of dimensions) {
+                for (let i=1; i<=5; i++) {
+                    const name = `${dim.key}${i}`;
+                    if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                        allAnswered = false;
+                        break;
+                    }
+                }
+                if (!allAnswered) break;
+            }
+            if (allAnswered && currentStep !== 'score') {
+                showStep('score');
+            }
+        }
+
+        // 监听所有核心题目的变化
+        document.addEventListener('change', function(e) {
+            if (e.target && e.target.matches('input[type="radio"]')) {
+                // 更新计分板 (如果计分板可见)
+                updateScoreboard();
+                // 自动跳转检查
+                checkAllAndJumpToScore();
+            }
+        });
+
+        // 重置
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.querySelectorAll('input[type="radio"]:checked').forEach(r => r.checked = false);
+            updateScoreboard();
+            // 不自动跳转，但可手动
+        });
+
+        // 随机示例
+        document.getElementById('randomDemoBtn').addEventListener('click', function() {
+            dimensions.forEach(dim => {
+                for (let i=1; i<=5; i++) {
+                    const name = `${dim.key}${i}`;
+                    const radios = document.querySelectorAll(`input[name="${name}"]`);
+                    if (radios.length) {
+                        const randomIdx = Math.floor(Math.random() * 5);
+                        radios[randomIdx].checked = true;
+                    }
+                }
+            });
+            updateScoreboard();
+            checkAllAndJumpToScore(); // 强制检查跳转
+        });
+
+        // 初始化: 显示封面，更新计分板备用
+        showStep('cover');
+        updateScoreboard(); // 初始化计分板
+    })();
+</script>
+</body>
+</html>
